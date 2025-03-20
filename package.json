@@ -1,0 +1,36 @@
+{
+  "name": "ep.u3d.puer",
+  "displayName": "EP.U3D.PUER",
+  "description": "EP.U3D.PUER 是一个基于 PuerTS 的扩展模块，提供了简单易用的 PuerBehaviour 组件和完整的 TypeScript 开发工作流，优化了脚本调试和自动化打包。",
+  "version": "0.0.1",
+  "unity": "2021.3",
+  "license": "MIT",
+  "author": {
+    "name": "EFramework Organization",
+    "email": "eframework-org@outlook.com",
+    "url": "https://github.com/eframework-org"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/eframework-org/EP.U3D.PUER.git"
+  },
+  "bugs": {
+    "url": "https://github.com/eframework-org/EP.U3D.PUER/issues"
+  },
+  "keywords": [
+    "eframework",
+    "package",
+    "unity",
+    "puer"
+  ],
+  "dependencies": {
+    "com.tencent.puerts.core": "2.1.2",
+    "com.tencent.puerts.ts-loader": "2.0.5",
+    "ep.u3d.util": "0.0.3",
+    "et.u3d.util": "0.0.1"
+  },
+  "puerAdapter": ".puer",
+  "puerExports": [
+    "EP.U3D.PUER"
+  ]
+}

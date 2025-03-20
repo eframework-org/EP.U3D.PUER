@@ -1,0 +1,19 @@
+{
+    "name": "EP.U3D.PUER",
+    "rootNamespace": "",
+    "references": [
+        "ET.U3D.UTIL",
+        "EP.U3D.UTIL",
+        "com.tencent.puerts.core",
+        "com.tencent.puerts.ts-loader"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

@@ -1,0 +1,191 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &3713262946416221324
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3405553627681689532}
+  m_Layer: 0
+  m_Name: GetInChildren
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3405553627681689532
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3713262946416221324}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 2812619392775547485}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &6034722986082542674
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2812619392775547485}
+  - component: {fileID: 975026412135134493}
+  m_Layer: 0
+  m_Name: Child
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2812619392775547485
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6034722986082542674}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 7508715770965307100}
+  m_Father: {fileID: 3405553627681689532}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &975026412135134493
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6034722986082542674}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5e85e6c6f7e296b469459945357b56a2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Clazz: TestComponent@MyComponent
+  Fields:
+  - Key: TestProp
+    Type: number
+    OValue: {fileID: 0}
+    BValue: 0000000000000000
+    LOValue: []
+    LBValue: []
+    BTArray: 0
+    BLBValue: 1
+  - Key: TestNumber
+    Type: number
+    OValue: {fileID: 0}
+    BValue: 0000000000000000
+    LOValue: []
+    LBValue: []
+    BTArray: 0
+    BLBValue: 1
+  - Key: TestString
+    Type: string
+    OValue: {fileID: 0}
+    BValue: 00000000000000000000000000000000
+    LOValue: []
+    LBValue: []
+    BTArray: 0
+    BLBValue: 1
+  - Key: TestBoolean
+    Type: boolean
+    OValue: {fileID: 0}
+    BValue: 00
+    LOValue: []
+    LBValue: []
+    BTArray: 0
+    BLBValue: 1
+--- !u!1 &7650867941947791553
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7508715770965307100}
+  - component: {fileID: 4193125898832293519}
+  m_Layer: 0
+  m_Name: Child2
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7508715770965307100
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7650867941947791553}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2812619392775547485}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4193125898832293519
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7650867941947791553}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5e85e6c6f7e296b469459945357b56a2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Clazz: TestComponent@MyComponent
+  Fields:
+  - Key: TestProp
+    Type: number
+    OValue: {fileID: 0}
+    BValue: 0000000000000000
+    LOValue: []
+    LBValue: []
+    BTArray: 0
+    BLBValue: 1
+  - Key: TestNumber
+    Type: number
+    OValue: {fileID: 0}
+    BValue: 0000000000000000
+    LOValue: []
+    LBValue: []
+    BTArray: 0
+    BLBValue: 1
+  - Key: TestString
+    Type: string
+    OValue: {fileID: 0}
+    BValue: 00000000000000000000000000000000
+    LOValue: []
+    LBValue: []
+    BTArray: 0
+    BLBValue: 1
+  - Key: TestBoolean
+    Type: boolean
+    OValue: {fileID: 0}
+    BValue: 00
+    LOValue: []
+    LBValue: []
+    BTArray: 0
+    BLBValue: 1

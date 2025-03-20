@@ -1,0 +1,6 @@
+{
+    "name": "EP.U3D.PUER",
+    "module": "index.js",
+    "types": "index.d.ts",
+    "type": "module"
+}

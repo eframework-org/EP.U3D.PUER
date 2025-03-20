@@ -1,0 +1,22 @@
+{
+    "name": "EP.U3D.PUER.TEST",
+    "rootNamespace": "",
+    "references": [
+        "ET.U3D.UTIL",
+        "EP.U3D.UTIL",
+        "com.tencent.puerts.core",
+        "com.tencent.puerts.ts-loader",
+        "EP.U3D.PUER",
+        "UnityEngine.TestRunner",
+        "ET.U3D.PUER"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

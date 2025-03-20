@@ -1,0 +1,23 @@
+{
+    "name": "ET.U3D.PUER.TEST",
+    "rootNamespace": "",
+    "references": [
+        "EP.U3D.PUER",
+        "EP.U3D.UTIL",
+        "ET.U3D.UTIL",
+        "com.tencent.puerts.core",
+        "com.tencent.puerts.core.Editor",
+        "ET.U3D.PUER"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
