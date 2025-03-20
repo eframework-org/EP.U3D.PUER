@@ -1,0 +1,16 @@
+*.csproj
+*.sln
+/.vs
+/Library
+/Local
+/Logs
+/Temp
+/obj
+/UserSettings
+/Logs
+/Local
+/Builds
+/node_modules
+/package-lock.json
+/package-lock.md5
+/package.json
