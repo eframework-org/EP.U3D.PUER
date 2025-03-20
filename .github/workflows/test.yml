@@ -24,7 +24,7 @@ permissions:
 jobs:
   test:
     name: 测试 ${{ matrix.testMode }} 环境
-    runs-on: windows-latest
+    runs-on: macos-latest
     strategy:
       fail-fast: false
       matrix:
@@ -71,14 +71,15 @@ jobs:
           echo "MinIO 服务已就绪"
           
           # 安装 MinIO 客户端
-          curl -O https://dl.min.io/client/mc/release/windows-amd64/mc.exe
+          curl -O https://dl.min.io/client/mc/release/linux-amd64/mc
+          chmod +x mc
           
           # 配置 MinIO 客户端
-          ./mc.exe alias set myminio http://localhost:9000 admin adminadmin
+          ./mc alias set myminio http://localhost:9000 admin adminadmin
           
           # 创建 default bucket 并设置为公开访问
-          ./mc.exe mb myminio/default
-          ./mc.exe anonymous set public myminio/default
+          ./mc mb myminio/default
+          ./mc anonymous set public myminio/default
           
           echo "MinIO 环境设置完成，default bucket 已创建并设置为公开访问"
 
