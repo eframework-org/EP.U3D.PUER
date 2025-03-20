@@ -93,8 +93,18 @@ jobs:
           packageMode: true
           projectPath: ${{ matrix.projectPath }}
           unityVersion: ${{ matrix.unityVersion }}
-          scopedRegistryUrl: https://registry.npmjs.org/
-          registryScopes: 'et, ep'
+          scopedRegistryUrl: >-
+            [
+              "https://registry.npmjs.org/",
+              "https://package.openupm.com"
+            ]
+          registryScopes: >-
+            [
+              "et",
+              "ep",
+              "com.tencent.puerts.core",
+              "com.tencent.puerts.ts-loader"
+            ]
           testMode: ${{ matrix.testMode }}
           artifactsPath: Results
           githubToken: ${{ secrets.GITHUB_TOKEN }}
