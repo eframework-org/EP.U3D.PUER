@@ -24,7 +24,7 @@ permissions:
 jobs:
   test:
     name: 测试 ${{ matrix.testMode }} 环境
-    runs-on: windows-latest
+    runs-on: macos-latest
     strategy:
       fail-fast: false
       matrix:
@@ -46,13 +46,17 @@ jobs:
         shell: bash
         run: |
           # 创建临时目录
-          mkdir -p /c/minio/data
+          mkdir -p ~/minio/data
           
           # 下载 MinIO 服务器和客户端
           echo "下载 MinIO 服务器..."
-          curl -L -o /c/minio/minio.exe https://dl.min.io/server/minio/release/windows-amd64/minio.exe --progress-bar
+          curl -L -o ~/minio/minio https://dl.min.io/server/minio/release/darwin-amd64/minio --progress-bar
           echo "下载 MinIO 客户端..."
-          curl -L -o /c/minio/mc.exe https://dl.min.io/client/mc/release/windows-amd64/mc.exe --progress-bar
+          curl -L -o ~/minio/mc https://dl.min.io/client/mc/release/darwin-amd64/mc --progress-bar
+          
+          # 设置执行权限
+          chmod +x ~/minio/minio
+          chmod +x ~/minio/mc
           
           # 设置环境变量
           export MINIO_ACCESS_KEY="admin"
@@ -60,7 +64,7 @@ jobs:
           
           # 启动 MinIO 服务器 (在后台运行)
           echo "启动 MinIO 服务器..."
-          /c/minio/minio.exe server /c/minio/data --console-address ":9090" --address ":9000" > /c/minio/minio.log 2>&1 &
+          ~/minio/minio server ~/minio/data --console-address ":9090" --address ":9000" > ~/minio/minio.log 2>&1 &
           
           # 等待 MinIO 服务启动
           echo "等待 MinIO 服务启动..."
@@ -76,7 +80,7 @@ jobs:
           
           if [ $retry_count -eq $max_retries ]; then
             echo "MinIO 服务启动超时，检查日志:"
-            cat /c/minio/minio.log
+            cat ~/minio/minio.log
             exit 1
           fi
           
@@ -84,18 +88,18 @@ jobs:
           
           # 配置 MinIO 客户端
           echo "配置 MinIO 客户端..."
-          /c/minio/mc.exe alias set myminio http://localhost:9000 admin adminadmin
+          ~/minio/mc alias set myminio http://localhost:9000 admin adminadmin
           
           # 创建 default bucket 并设置为公开访问
           echo "创建 default bucket..."
-          /c/minio/mc.exe mb myminio/default
+          ~/minio/mc mb myminio/default
           echo "设置 default bucket 为公开访问..."
-          /c/minio/mc.exe anonymous set public myminio/default
+          ~/minio/mc anonymous set public myminio/default
           
           echo "MinIO 环境设置完成，default bucket 已创建并设置为公开访问"
           
           # 添加 MinIO 目录到 PATH
-          echo "/c/minio" >> $GITHUB_PATH
+          echo "~/minio" >> $GITHUB_PATH
 
       - name: 运行测试
         uses: game-ci/unity-test-runner@v4
@@ -124,6 +128,7 @@ jobs:
           artifactsPath: Results
           githubToken: ${{ secrets.GITHUB_TOKEN }}
           checkName: 测试 ${{ matrix.testMode }} 报告
+          useHostNetwork: true
 
       - name: 上传报告
         uses: actions/upload-artifact@v4
