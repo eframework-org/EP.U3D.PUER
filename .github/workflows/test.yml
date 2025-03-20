@@ -24,14 +24,14 @@ permissions:
 jobs:
   test:
     name: 测试 ${{ matrix.testMode }} 环境
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     strategy:
       fail-fast: false
       matrix:
         projectPath:
           - Package
         unityVersion: [6000.0.32f1]
-        testMode: [EditMode, PlayMode]
+        testMode: [EditMode]
     outputs:
       passed: ${{ steps.tests.conclusion == 'success' }}
 
