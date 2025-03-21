@@ -50,6 +50,12 @@ jobs:
           restore-keys: |
             Library-${{ runner.os }}-
 
+      - name: 设置 Node.js 环境
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18.x'
+          registry-url: 'https://registry.npmjs.org'
+
       - name: 设置 MinIO 环境
         shell: bash
         run: |
