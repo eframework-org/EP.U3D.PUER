@@ -110,6 +110,37 @@ jobs:
         with:
           node-version: '18.x'
           registry-url: 'https://registry.npmjs.org'
+          
+      - name: 打印 Node.js 和 npm 信息
+        shell: bash
+        run: |
+          # 打印 Node.js 和 npm 版本
+          echo "Node.js 版本: $(node -v)"
+          echo "npm 版本: $(npm -v)"
+          
+          # 打印 Node.js 和 npm 的完整路径 (Unix格式)
+          echo "Node.js 路径 (Unix): $(which node)"
+          echo "npm 路径 (Unix): $(which npm)"
+          
+          # 打印 Node.js 和 npm 的完整路径 (Windows格式)
+          NODE_WIN_PATH=$(which node | sed 's/^\///;s/\//\\/g;s/^/C:\\/')
+          NPM_WIN_PATH=$(which npm | sed 's/^\///;s/\//\\/g;s/^/C:\\/')
+          echo "Node.js 路径 (Windows): $NODE_WIN_PATH"
+          echo "npm 路径 (Windows): $NPM_WIN_PATH"
+          
+          # 打印环境变量中的路径设置
+          echo "PATH 环境变量: $PATH"
+          
+          # 检查 node 和 npm 是否可执行
+          echo "检查 node 是否可执行:"
+          node --version && echo "node 可以执行" || echo "node 不可执行"
+          echo "检查 npm 是否可执行:"
+          npm --version && echo "npm 可以执行" || echo "npm 不可执行"
+          
+          # 查看 Node.js 安装目录内容
+          NODE_DIR=$(dirname $(which node))
+          echo "Node.js 安装目录 ($NODE_DIR) 内容:"
+          ls -la $NODE_DIR
       
       - name: 运行测试
         uses: game-ci/unity-test-runner@v4
