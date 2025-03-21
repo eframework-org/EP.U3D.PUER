@@ -24,21 +24,12 @@ public class TestXPuerGen
         var genDir = XPuer.Gen.GenDir;
 
         // 验证结果
-        Assert.IsTrue(Directory.Exists(genDir), "如果目录不存在，GenDir应创建该目录");
+        Assert.IsTrue(XFile.HasDirectory(genDir), "如果目录不存在，GenDir应创建该目录");
+        Assert.IsTrue(genDir.EndsWith("/"), "GenDir应以斜杠结尾");
     }
 
     [Test]
-    public void UpmExports()
-    {
-        var exports = XPuer.Gen.UpmExports();
-
-        // 验证结果
-        Assert.IsTrue(exports.ContainsKey("ep.u3d.puer"), "UpmExports应包含ep.u3d.puer包");
-        Assert.IsFalse(exports.ContainsKey("ep.u3d.puer2"), "UpmExports不应包含不存在的包");
-    }
-
-    [Test]
-    public void DynamicBindings()
+    public void Bindings()
     {
         // 保存原始 Bindings
         var originalBindings = XPuer.Gen.Bindings;
@@ -151,7 +142,7 @@ public class TestXPuerGen
     }
 
     [Test]
-    public void GetFriendlyName()
+    public void FriendlyName()
     {
         // 测试基本类型
         var intType = typeof(int);
@@ -185,41 +176,36 @@ public class TestXPuerGen
     }
 
     [Test]
-    public void LinkModule()
+    public void UpmExports()
     {
-        // 准备package.json
-        var packageJsonPath = XFile.PathJoin(XEnv.ProjectPath, "package.json");
-        var tempPackageJsonPath = XFile.PathJoin(XEnv.ProjectPath, ".package.json");
-        var needRestore = false;
-        if (!XFile.HasFile(tempPackageJsonPath))
+        var exports = XPuer.Gen.UpmExports();
+
+        // 验证结果
+        Assert.IsTrue(exports.ContainsKey("ep.u3d.puer"), "UpmExports应包含ep.u3d.puer包");
+        Assert.IsFalse(exports.ContainsKey("ep.u3d.puer2"), "UpmExports不应包含不存在的包");
+    }
+
+    [Test]
+    public void GenModule()
+    {
+        try
         {
-            needRestore = true;
-            var packagePath = ET.U3D.UTIL.XEditor.Utility.FindPackage().assetPath;
-            var tsDir = XFile.PathJoin(packagePath, "Tests/Runtime/TypeScripts");
-            if (XFile.HasFile(packageJsonPath)) XFile.CopyFile(packageJsonPath, tempPackageJsonPath);
-            XFile.CopyFile(XFile.PathJoin(tsDir, "package.json"), packageJsonPath);
+            // 待删除模块
+            var deleteModule = "node_modules/.puer/EP.U3D.PUER";
+
+            // 测试ToModule
+            var modules = XPuer.Gen.ToModule();
+            Assert.IsTrue(modules.Contains(deleteModule), "模块列表应包含EP.U3D.PUER模块");
+            modules.Remove(deleteModule);
+
+            // 测试EP.U3D.PUER是否被删除
+            XPuer.Gen.LinkModule(modules);
+            var fixedJson = XFile.OpenText(XFile.PathJoin(XEnv.ProjectPath, "package.json"));
+            Assert.IsFalse(fixedJson.Contains(deleteModule), "处理后的package.json不应包含已删除的模块");
         }
-        // 待删除模块
-        var deleteModule = "node_modules/.puer/EP.U3D.PUER";
-
-        // 测试ToModule
-        var modules = XPuer.Gen.ToModule();
-        Assert.IsTrue(modules.Contains(deleteModule), "模块列表应包含EP.U3D.PUER模块");
-        modules.Remove(deleteModule);
-
-        // 测试EP.U3D.PUER是否被删除
-        XPuer.Gen.LinkModule(modules);
-        var fixedJson = File.ReadAllText(packageJsonPath);
-        Assert.IsFalse(fixedJson.Contains(deleteModule), "处理后的package.json不应包含已删除的模块");
-
-        if (needRestore)
+        finally
         {
-            // 恢复package.json
-            if (XFile.HasFile(tempPackageJsonPath))
-            {
-                XFile.CopyFile(tempPackageJsonPath, packageJsonPath);
-                XFile.DeleteFile(tempPackageJsonPath);
-            }
+            XPuer.Gen.GenModule(); // 恢复模块导出
         }
     }
 

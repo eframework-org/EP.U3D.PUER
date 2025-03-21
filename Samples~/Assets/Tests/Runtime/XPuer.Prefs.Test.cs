@@ -3,7 +3,6 @@
 // license that can be found in the LICENSE file.
 
 #if UNITY_INCLUDE_TESTS
-
 using NUnit.Framework;
 using static EP.U3D.PUER.XPuer;
 

@@ -3,7 +3,6 @@
 // license that can be found in the LICENSE file.
 
 #if UNITY_INCLUDE_TESTS
-
 using NUnit.Framework;
 using ET.U3D.UTIL;
 using EP.U3D.UTIL;
@@ -12,6 +11,7 @@ using System.Text.RegularExpressions;
 using static ET.U3D.PUER.XPuer;
 using UnityEngine.TestTools;
 using UnityEngine.Networking;
+using EP.U3D.PUER;
 
 /// <summary>
 /// Publish 的单元测试类，验证发布过程的正确性。
@@ -20,9 +20,14 @@ public class TestXPuerPublish
 {
     [Test]
     [PrebuildSetup(typeof(TestXPuerBuild))]
-    [PostBuildCleanup(typeof(TestXPuerBuild))]
     public void Process()
     {
+        // 复制资源到本地
+        var buildDir = XFile.PathJoin(XPrefs.GetString(Build.Prefs.Output, Build.Prefs.OutputDefault), XPrefs.GetString(XEnv.Prefs.Channel, XEnv.Prefs.ChannelDefault), XEnv.Platform.ToString());
+        if (XFile.HasDirectory(XPuer.Const.LocalPath)) XFile.DeleteDirectory(XPuer.Const.LocalPath);
+        XFile.CopyDirectory(buildDir, XPuer.Const.LocalPath);
+        Assert.IsTrue(XFile.HasDirectory(XPuer.Const.LocalPath));
+
         // 设置测试环境
         XPrefs.Asset.Set(Publish.Prefs.Host, "http://localhost:9000");
         XPrefs.Asset.Set(Publish.Prefs.Bucket, "default");

@@ -3,23 +3,12 @@
 // license that can be found in the LICENSE file.
 
 #if UNITY_INCLUDE_TESTS
-
-using System.IO;
 using System.Linq;
-using EP.U3D.UTIL;
 using NUnit.Framework;
 using static ET.U3D.PUER.XPuer;
 
 public class TestXPuerSource
 {
-    [OneTimeSetUp]
-    public void Init()
-    {
-        var packagePath = ET.U3D.UTIL.XEditor.Utility.FindPackage().assetPath;
-        var tsDir = Path.Combine(packagePath, "Tests/Runtime/TypeScripts");
-        XPrefs.Asset.Set(Source.Prefs.Path, tsDir);
-    }
-
     [Test]
     public void Parse()
     {

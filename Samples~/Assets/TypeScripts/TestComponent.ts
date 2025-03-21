@@ -1,48 +1,41 @@
 import { XLog } from "EP.U3D.UTIL"
 
 export class MyComponent extends CS.EP.U3D.PUER.PuerBehaviour {
-    //测试用属性
     public TestProp: number = 0
-
     public TestNumber: number = 0
     public TestString: string = ""
     public TestBoolean: boolean = false
 
-    //测试用方法
-    public TestFunc(obj: CS.UnityEngine.GameObject) {
-        XLog.Info("TestFunc: {0}", obj.name)
-    }
-
     public Awake() {
-        XLog.Info("TestComponent Awake")
+        XLog.Info("TestComponent Awake: {0}", this.name)
     }
 
     public OnEnable() {
-        XLog.Info("TestComponent OnEnable")
+        XLog.Info("TestComponent OnEnable: {0}", this.name)
     }
 
     public Start() {
-        XLog.Info("TestComponent Start")
+        XLog.Info("TestComponent Start: {0}", this.name)
     }
 
     public OnDisable() {
-        XLog.Info("TestComponent OnDisable")
+        XLog.Info("TestComponent OnDisable: {0}", this.name)
     }
 
     public OnDestroy() {
-        XLog.Info("TestComponent OnDestroy")
+        XLog.Info("TestComponent OnDestroy: {0}", this.name)
     }
 
     public Update() {
-        XLog.Info("TestComponent Update")
+        XLog.Info("TestComponent Update: {0}", this.name)
     }
 
     public LateUpdate() {
-        XLog.Info("TestComponent LateUpdate")
+        XLog.Info("TestComponent LateUpdate: {0}", this.name)
     }
 
     public FixedUpdate() {
-        XLog.Info("TestComponent FixedUpdate")
+        XLog.Info("TestComponent FixedUpdate: {0}", this.name)
     }
 
     public OnTriggerEnter(other: CS.UnityEngine.Collider) {

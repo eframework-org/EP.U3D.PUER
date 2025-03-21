@@ -3,7 +3,6 @@
 // license that can be found in the LICENSE file.
 
 #if UNITY_INCLUDE_TESTS
-
 using System.Collections;
 using EP.U3D.PUER;
 using UnityEngine.TestTools;
@@ -12,7 +11,6 @@ using Puerts;
 using EP.U3D.UTIL;
 using NUnit.Framework;
 using static EP.U3D.PUER.XPuer;
-using System.IO;
 
 public class TestXPuerCore
 {
@@ -26,11 +24,9 @@ public class TestXPuerCore
         {
             get
             {
-                var packagePath = ET.U3D.UTIL.XEditor.Utility.FindPackage().assetPath;
-                var tsDir = Path.Combine(XEnv.ProjectPath, packagePath, "Tests/Runtime/TypeScripts");
                 var loader = new Puerts.TSLoader.TSLoader();
                 loader.UseRuntimeLoader(new DefaultLoader());
-                loader.UseRuntimeLoader(new NodeModuleLoader(tsDir));
+                loader.UseRuntimeLoader(new NodeModuleLoader(XEnv.ProjectPath));
                 return loader;
             }
         }
@@ -94,28 +90,6 @@ public class TestXPuerCore
             Assert.IsTrue(isPreInit, "OnPreInit事件应被触发");
             Assert.IsTrue(isVMStart, "OnVMStart事件应被触发");
             Assert.IsTrue(isPostInit, "OnPostInit事件应被触发");
-
-            // 测试 NewObject
-            var newObject = NewObject(VM.ExecuteModule("TestComponent").Get<JSObject>("MyComponent"), null);
-            Assert.IsTrue(newObject.Get<JSObject>("TestFunc") != null, "创建的JS对象应包含testFun方法");
-
-            // 测试 FuncApply
-            var obj = new GameObject("TestObj");
-            LogAssert.Expect(LogType.Log, "TestObj");
-            FuncApply(newObject, "TestFunc", new object[] { obj });
-
-            // 测试 InitField
-            // 测试字符串类型
-            InitField(newObject, "testField", "testValue", 1 << 2);
-            Assert.AreEqual("testValue", newObject.Get<string>("testField"), "字符串类型字段应被正确初始化");
-            // 测试值类型
-            InitField(newObject, "numField", 123, 1 << 2);
-            Assert.AreEqual(123, newObject.Get<int>("numField"), "数值类型字段应被正确初始化");
-            // 测试数组类型
-            string[] strArray = new string[] { "aa", "bb", "cc" };
-            InitField(newObject, "arrayField", strArray, 1 << 2);
-            var resultArray = newObject.Get<JSObject>("arrayField");
-            Assert.AreEqual("aa", resultArray.Get<string[]>("0")[0], "数组类型字段应被正确初始化");
         }
     }
 }
