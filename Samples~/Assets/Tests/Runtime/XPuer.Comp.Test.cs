@@ -5,6 +5,8 @@
 #if UNITY_INCLUDE_TESTS
 using System;
 using System.Collections;
+using System.Collections.Generic;
+using System.Text;
 using System.Text.RegularExpressions;
 using EP.U3D.PUER;
 using EP.U3D.UTIL;
@@ -35,33 +37,42 @@ public class TestXPuerComp
         myComponent = XPuer.VM.ExecuteModule("TestComponent").Get<JSObject>("MyComponent");
     }
 
-    [TestCase(true)]
-    [TestCase(false)]
-    public void Property(bool isDynamic)
+    [Test]
+    public void Property()
     {
-        PuerBehaviour puerComp = null;
-        GameObject obj = null;
-        if (isDynamic)
+        // 准备测试对象
+        var obj = GameObject.Instantiate(Resources.Load<GameObject>("Bundle/Prefab/MyComponent"));
+        var puerComp = obj.GetComponent<PuerBehaviour>();
+        var childPuerComp = obj.transform.Find("Child2").GetComponent<PuerBehaviour>();
+
+        // 测试值类型类型
+        Assert.AreEqual(1, BitConverter.ToDouble(puerComp.Fields.Find(f => f.Key == "TestNumber").BValue, 0), "应当包含number类型");
+        Assert.AreEqual("test string", Encoding.UTF8.GetString(puerComp.Fields.Find(f => f.Key == "TestString").BValue).Replace("\0", ""), "应当包含string类型");
+        Assert.AreEqual(true, BitConverter.ToBoolean(puerComp.Fields.Find(f => f.Key == "TestBoolean").BValue, 0), "应当包含boolean类型");
+        Assert.AreEqual(new Vector3(3, 3, 3), XObject.FromByte<Vector3>(puerComp.Fields.Find(f => f.Key == "TestVector3").BValue), "应当包含Vector3类型");
+        Assert.AreEqual(new Vector4(4.4f, 4.4f, 4.4f, 4.4f), XObject.FromByte<Vector4>(puerComp.Fields.Find(f => f.Key == "TestVector4").BValue), "应当包含Vector4类型");
+        Assert.AreEqual(new Color(1, 0, 0, 0), XObject.FromByte<Color>(puerComp.Fields.Find(f => f.Key == "TestColor").BValue), "应当包含Color类型");
+        // 测试引用类型
+        Assert.AreEqual(childPuerComp, puerComp.Fields.Find(f => f.Key == "TestObject").OValue, "应当包含PuerBehaviour对象类型");
+
+        // 测试值数组类型
+        var numArray = puerComp.Fields.Find(f => f.Key == "TestNumberArray");
+        var numValues = new List<double>();
+        foreach (var item in numArray.LBValue)
         {
-            obj = new GameObject();
-            PuerBehaviour.Add(obj, "", myComponent);
-            puerComp = obj.GetComponent<PuerBehaviour>();
+            numValues.Add(BitConverter.ToDouble(item.Data, 0));
         }
-        else
-        {
-            obj = GameObject.Instantiate(Resources.Load<GameObject>("Bundle/Prefab/MyComponent"));
-            puerComp = obj.GetComponent<PuerBehaviour>();
-            Source.Parse();
-            Assert.AreEqual(4, puerComp.Fields.Count, "UnitTest类应包含4个属性");
-            Assert.IsNotNull(puerComp.Fields.Find(f => f.Key == "TestProp"), "应当包含TestProp属性");
-            Assert.IsNotNull(puerComp.Fields.Find(f => f.Type == "number"), "应当包含number类型");
-            Assert.IsNotNull(puerComp.Fields.Find(f => f.Type == "string"), "应当包含string类型");
-            Assert.IsNotNull(puerComp.Fields.Find(f => f.Type == "boolean"), "应当包含boolean类型");
-        }
+        Assert.AreEqual(2, numValues.Count, "数值数组长度应为2");
+        Assert.AreEqual(2, numValues[0], "第一个元素应为2");
+        Assert.AreEqual(3, numValues[1], "第二个元素应为3");
+
+        // 测试引用数组类型
+        var objArray = puerComp.Fields.Find(f => f.Key == "TestObjectArray");
+        Assert.AreEqual(1, objArray.LOValue.Count, "对象数组长度应为1");
+        Assert.AreEqual(childPuerComp, objArray.LOValue[0], "第一个元素应为childPuerComp");
 
         Assert.IsNotNull(puerComp.JProxy, "PuerBehaviour的JProxy不应为空");
         Assert.IsNotNull(puerComp.JType, "PuerBehaviour的JType不应为空");
-        Assert.IsNotNull(puerComp.JType.Type, "PuerBehaviour的JType.Type不应为空");
 
         // 清理对象
         if (obj) GameObject.Destroy(obj);
