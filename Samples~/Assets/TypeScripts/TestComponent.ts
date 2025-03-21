@@ -62,3 +62,7 @@ export class MyComponent extends CS.EP.U3D.PUER.PuerBehaviour {
         XLog.Info("TestComponent OnCollisionStay: {0}", other.gameObject.name)
     }
 }
+
+export class MyComponent2 extends CS.EP.U3D.PUER.PuerBehaviour {
+    public TestRef: MyComponent = null
+}
