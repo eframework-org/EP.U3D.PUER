@@ -1,0 +1,17 @@
+{
+    "dependencies": {
+        "EP.U3D.PUER": "file:node_modules/.puer/EP.U3D.PUER",
+        "EP.U3D.UTIL": "file:node_modules/.puer/EP.U3D.UTIL",
+        "System": "file:node_modules/.puer/System",
+        "UnityEngine": "file:node_modules/.puer/UnityEngine"
+    },
+    "devDependencies": {
+        "typescript": "5.6.2",
+        "webpack": "5.94.0",
+        "webpack-cli": "5.1.4"
+    },
+    "scripts": {
+        "build-modules": "webpack",
+        "build-sources": "cd ./Assets/TypeScripts && tsc --inlineSourceMap false --outDir ../Temp/TypeScripts --allowJs true"
+    }
+}
