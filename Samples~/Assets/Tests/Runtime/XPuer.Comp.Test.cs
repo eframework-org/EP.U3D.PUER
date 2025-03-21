@@ -5,7 +5,6 @@
 #if UNITY_INCLUDE_TESTS
 using System;
 using System.Collections;
-using System.IO;
 using System.Text.RegularExpressions;
 using EP.U3D.PUER;
 using EP.U3D.UTIL;
@@ -25,7 +24,7 @@ public class TestXPuerComp
         var loader = new Puerts.TSLoader.TSLoader();
         loader.UseRuntimeLoader(new DefaultLoader());
         loader.UseRuntimeLoader(new NodeModuleLoader(XEnv.ProjectPath));
-        XPuer.VM = new JsEnv(loader, 9222);
+        XPuer.VM = new JsEnv(loader, -1);
         XPuer.VM.UsingAction<JSObject, string, object[]>();
         XPuer.VM.UsingAction<JSObject, string, object, int>();
 
@@ -126,8 +125,8 @@ public class TestXPuerComp
         yield return new WaitForSeconds(0.5f);
 
         // 清理对象
-        GameObject.Destroy(cube1);
-        GameObject.Destroy(cube2);
+        GameObject.DestroyImmediate(cube1);
+        GameObject.DestroyImmediate(cube2);
     }
 
     [TestCase(0, 1, 1, 1, 1, "当前节点")]
@@ -194,7 +193,7 @@ public class TestXPuerComp
         finally
         {
             // 清理对象
-            GameObject.Destroy(root);
+            GameObject.DestroyImmediate(root);
         }
     }
 }
