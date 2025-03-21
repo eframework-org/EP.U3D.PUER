@@ -1,10 +1,18 @@
 import { XLog } from "EP.U3D.UTIL"
+import { Vector3, Vector4, Color } from "UnityEngine"
+import { PuerBehaviour } from "EP.U3D.PUER"
 
-export class MyComponent extends CS.EP.U3D.PUER.PuerBehaviour {
-    public TestProp: number = 0
-    public TestNumber: number = 0
-    public TestString: string = ""
-    public TestBoolean: boolean = false
+export class MyComponent extends PuerBehaviour {
+    public TestNumber: number
+    public TestString: string
+    public TestBoolean: boolean
+    public TestVector3: Vector3
+    public TestVector4: Vector4
+    public TestColor: Color
+    public TestObject: PuerBehaviour
+    public TestNumberArray: number[]
+    public TestObjectArray: PuerBehaviour[]
+
 
     public Awake() {
         XLog.Info("TestComponent Awake: {0}", this.name)
@@ -63,6 +71,6 @@ export class MyComponent extends CS.EP.U3D.PUER.PuerBehaviour {
     }
 }
 
-export class MyComponent2 extends CS.EP.U3D.PUER.PuerBehaviour {
-    public TestRef: MyComponent = null
+export class MyComponent2 extends PuerBehaviour {
+
 }
