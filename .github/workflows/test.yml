@@ -110,14 +110,7 @@ jobs:
         with:
           node-version: '18.x'
           registry-url: 'https://registry.npmjs.org'
-          
-      - name: 安装项目依赖
-        shell: bash
-        run: |
-          cd ${{ matrix.projectPath }}
-          npm install
-          echo "npm 依赖安装完成"
-
+      
       - name: 运行测试
         uses: game-ci/unity-test-runner@v4
         id: tests
