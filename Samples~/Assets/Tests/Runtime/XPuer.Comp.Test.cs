@@ -14,7 +14,6 @@ using NUnit.Framework;
 using Puerts;
 using UnityEngine;
 using UnityEngine.TestTools;
-using static ET.U3D.PUER.XPuer;
 
 public class TestXPuerComp
 {
