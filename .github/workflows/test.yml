@@ -24,7 +24,7 @@ permissions:
 jobs:
   test:
     name: 测试 ${{ matrix.testMode }} 环境
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     strategy:
       fail-fast: false
       matrix:
@@ -41,6 +41,69 @@ jobs:
         with:
           lfs: true
 
+      - name: 检出缓存
+        uses: actions/cache@v3
+        with:
+          path: ${{ matrix.projectPath }}/Library
+          key: Library-${{ matrix.projectPath }}
+          restore-keys: |
+            Library-
+
+      - name: 设置 MinIO 环境
+        shell: bash
+        run: |
+          # 创建临时目录
+          mkdir -p /c/minio/data
+          
+          # 下载 MinIO 服务器和客户端
+          echo "下载 MinIO 服务器..."
+          curl -L -o /c/minio/minio.exe https://dl.min.io/server/minio/release/windows-amd64/minio.exe --progress-bar
+          echo "下载 MinIO 客户端..."
+          curl -L -o /c/minio/mc.exe https://dl.min.io/client/mc/release/windows-amd64/mc.exe --progress-bar
+          
+          # 设置环境变量
+          export MINIO_ACCESS_KEY="admin"
+          export MINIO_SECRET_KEY="adminadmin"
+          
+          # 启动 MinIO 服务器 (在后台运行)
+          echo "启动 MinIO 服务器..."
+          /c/minio/minio.exe server /c/minio/data --console-address ":9090" --address ":9000" > /c/minio/minio.log 2>&1 &
+          
+          # 等待 MinIO 服务启动
+          echo "等待 MinIO 服务启动..."
+          max_retries=30
+          retry_interval=2
+          retry_count=0
+          
+          until curl -s --head http://localhost:9000/minio/health/ready || [ $retry_count -eq $max_retries ]; do
+            echo "等待 MinIO 服务就绪... (尝试 $retry_count/$max_retries)"
+            sleep $retry_interval
+            retry_count=$((retry_count+1))
+          done
+          
+          if [ $retry_count -eq $max_retries ]; then
+            echo "MinIO 服务启动超时，检查日志:"
+            cat /c/minio/minio.log
+            exit 1
+          fi
+          
+          echo "MinIO 服务已就绪"
+          
+          # 配置 MinIO 客户端
+          echo "配置 MinIO 客户端..."
+          /c/minio/mc.exe alias set myminio http://localhost:9000 admin adminadmin
+          
+          # 创建 default bucket 并设置为公开访问
+          echo "创建 default bucket..."
+          /c/minio/mc.exe mb myminio/default
+          echo "设置 default bucket 为公开访问..."
+          /c/minio/mc.exe anonymous set public myminio/default
+          
+          echo "MinIO 环境设置完成，default bucket 已创建并设置为公开访问"
+          
+          # 添加 MinIO 目录到 PATH
+          echo "/c/minio" >> $GITHUB_PATH
+
       - name: 运行测试
         uses: game-ci/unity-test-runner@v4
         id: tests
@@ -51,18 +114,6 @@ jobs:
         with:
           projectPath: ${{ matrix.projectPath }}
           unityVersion: ${{ matrix.unityVersion }}
-          scopedRegistryUrl: >-
-            [
-              "https://registry.npmjs.org/",
-              "https://package.openupm.com"
-            ]
-          registryScopes: >-
-            [
-              "et",
-              "ep",
-              "com.tencent.puerts.core",
-              "com.tencent.puerts.ts-loader"
-            ]
           testMode: ${{ matrix.testMode }}
           artifactsPath: Results
           githubToken: ${{ secrets.GITHUB_TOKEN }}
