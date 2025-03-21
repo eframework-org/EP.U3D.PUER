@@ -31,7 +31,7 @@ jobs:
         projectPath:
           - Samples~
         unityVersion: [6000.0.32f1]
-        testMode: [EditMode]
+        testMode: [PlayMode]
     outputs:
       passed: ${{ steps.tests.conclusion == 'success' }}
 
