@@ -16,7 +16,7 @@ XPuer.Build 提供了脚本的构建工作流，支持 TypeScript 脚本的编�
 
 | 配置项 | 配置键 | 默认值 | 功能说明 |
 |--------|--------|--------|----------|
-| 输入路径 | `Puer/Build/Input@Editor` | `Assets/Temp/Scripts/TS` | 设置 TypeScript 编译文件的临时目录 |
+| 输入路径 | `Puer/Build/Input@Editor` | `Assets/Temp/TypeScripts` | 设置 TypeScript 编译文件的临时目录 |
 | 输出路径 | `Puer/Build/Output@Editor` | `Builds/Patch/Scripts/TS` | 设置构建输出的目标目录，按照渠道和平台自动组织目录结构 |
 | 构建任务 | `Puer/Build/Tasks@Editor` | `["build-modules", "build-sources"]` | 配置需要执行的 NPM 构建任务，按照配置顺序依次执行任务 |
 

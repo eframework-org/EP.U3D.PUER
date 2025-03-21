@@ -30,7 +30,7 @@ namespace ET.U3D.PUER
         /// 
         /// 源文件路径：
         /// - 配置键：Puer/Source/Path@Editor
-        /// - 默认值：Assets/Scripts/TS
+        /// - 默认值：Assets/TypeScripts
         /// - 功能说明：
         ///   - 设置 TypeScript 源文件的根目录路径
         ///   - 所有的源文件都将从此目录下解析
@@ -159,9 +159,9 @@ namespace ET.U3D.PUER
 
                 /// <summary>
                 /// 源文件路径的默认值。
-                /// 默认设置为 Assets/Scripts/TS 目录。
+                /// 默认设置为 Assets/TypeScripts 目录。
                 /// </summary>
-                public const string PathDefault = "Assets/Scripts/TS";
+                public const string PathDefault = "Assets/TypeScripts";
 
                 /// <summary>
                 /// 编辑器工具的配置键。

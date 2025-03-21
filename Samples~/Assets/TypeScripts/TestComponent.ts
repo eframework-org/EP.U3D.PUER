@@ -1,3 +1,5 @@
+import { XLog } from "EP.U3D.UTIL"
+
 export class MyComponent extends CS.EP.U3D.PUER.PuerBehaviour {
     //测试用属性
     public TestProp: number = 0
@@ -8,62 +10,62 @@ export class MyComponent extends CS.EP.U3D.PUER.PuerBehaviour {
 
     //测试用方法
     public TestFunc(obj: CS.UnityEngine.GameObject) {
-        CS.UnityEngine.Debug.Log(obj.name);
+        XLog.Info("TestFunc: {0}", obj.name)
     }
 
     public Awake() {
-        CS.UnityEngine.Debug.Log("TestComponent Awake")
+        XLog.Info("TestComponent Awake")
     }
 
     public OnEnable() {
-        CS.UnityEngine.Debug.Log("TestComponent OnEnable")
+        XLog.Info("TestComponent OnEnable")
     }
 
     public Start() {
-        CS.UnityEngine.Debug.Log("TestComponent Start")
+        XLog.Info("TestComponent Start")
     }
 
     public OnDisable() {
-        CS.UnityEngine.Debug.Log("TestComponent OnDisable")
+        XLog.Info("TestComponent OnDisable")
     }
 
     public OnDestroy() {
-        CS.UnityEngine.Debug.Log("TestComponent OnDestroy")
+        XLog.Info("TestComponent OnDestroy")
     }
 
     public Update() {
-        CS.UnityEngine.Debug.Log("TestComponent Update")
+        XLog.Info("TestComponent Update")
     }
 
     public LateUpdate() {
-        CS.UnityEngine.Debug.Log("TestComponent LateUpdate")
+        XLog.Info("TestComponent LateUpdate")
     }
 
     public FixedUpdate() {
-        CS.UnityEngine.Debug.Log("TestComponent FixedUpdate")
+        XLog.Info("TestComponent FixedUpdate")
     }
 
     public OnTriggerEnter(other: CS.UnityEngine.Collider) {
-        CS.UnityEngine.Debug.Log("TestComponent OnTriggerEnter")
+        XLog.Info("TestComponent OnTriggerEnter: {0}", other.name)
     }
 
     public OnTriggerExit(other: CS.UnityEngine.Collider) {
-        CS.UnityEngine.Debug.Log("TestComponent OnTriggerExit")
+        XLog.Info("TestComponent OnTriggerExit: {0}", other.name)
     }
 
     public OnTriggerStay(other: CS.UnityEngine.Collider) {
-        CS.UnityEngine.Debug.Log("TestComponent OnTriggerStay")
+        XLog.Info("TestComponent OnTriggerStay: {0}", other.name)
     }
 
     public OnCollisionEnter(other: CS.UnityEngine.Collision) {
-        CS.UnityEngine.Debug.Log("TestComponent OnCollisionEnter")
+        XLog.Info("TestComponent OnCollisionEnter: {0}", other.gameObject.name)
     }
 
     public OnCollisionExit(other: CS.UnityEngine.Collision) {
-        CS.UnityEngine.Debug.Log("TestComponent OnCollisionExit")
+        XLog.Info("TestComponent OnCollisionExit: {0}", other.gameObject.name)
     }
 
     public OnCollisionStay(other: CS.UnityEngine.Collision) {
-        CS.UnityEngine.Debug.Log("TestComponent OnCollisionStay")
+        XLog.Info("TestComponent OnCollisionStay: {0}", other.gameObject.name)
     }
 }

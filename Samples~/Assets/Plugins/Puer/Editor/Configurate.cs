@@ -1,4 +1,3 @@
-#if UNITY_EDITOR
 using EP.U3D.UTIL;
 using ET.U3D.UTIL;
 using UnityEngine.Events;
@@ -12,13 +11,13 @@ using System.Reflection;
 using Puerts;
 using ET.U3D.PUER;
 
-namespace AOT.Editor
+namespace Plugins.Puer.Editor
 {
     [XEditor.Const]
     [InitializeOnLoad]
-    public class Constants
+    public class Configurate
     {
-        static Constants()
+        static Configurate()
         {
             XPuer.Gen.Types = new List<Type>() {
                 typeof(Handheld)
@@ -26,6 +25,7 @@ namespace AOT.Editor
 
             XPuer.Gen.Namespaces = new List<string>() {
                 "System",
+                "UnityEngine",
             };
 
             XPuer.Gen.Bindings = new List<Type>() {
@@ -326,4 +326,3 @@ namespace AOT.Editor
         }
     }
 }
-#endif

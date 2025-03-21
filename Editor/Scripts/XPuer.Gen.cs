@@ -35,7 +35,7 @@ namespace ET.U3D.PUER
         /// 
         /// 输出路径：
         /// - 配置键：Puer/Gen/Output@Editor
-        /// - 默认值：Assets/Scripts/AOT/Gen/Puer/
+        /// - 默认值：Assets/Plugins/Puer/Gen/
         /// - 功能说明：设置生成代码的输出目录
         /// 
         /// 自动生成：
@@ -194,7 +194,7 @@ namespace ET.U3D.PUER
             /// 使用手册
             /// 1. 路径配置
             /// 1.1 输出路径
-            ///     设置生成代码的输出目录，默认为 Assets/Scripts/AOT/Gen/Puer/。
+            ///     设置生成代码的输出目录，默认为 Assets/Plugins/Puer/Gen/。
             /// 
             /// 2. 自动化配置
             /// 2.1 自动生成
@@ -214,7 +214,7 @@ namespace ET.U3D.PUER
                 /// <summary>
                 /// 代码生成输出路径的默认值。
                 /// </summary>
-                public const string OutputDefault = "Assets/Scripts/AOT/Gen/Puer/";
+                public const string OutputDefault = "Assets/Plugins/Puer/Gen/";
 
                 /// <summary>
                 /// 自动生成功能的配置键。

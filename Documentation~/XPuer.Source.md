@@ -18,7 +18,7 @@ XPuer.Source 实现了源文件管理系统，用于 TypeScript 源文件的解�
 
 #### 源文件路径
 - 配置键：`Puer/Source/Path@Editor`
-- 默认值：`Assets/Scripts/TS`
+- 默认值：`Assets/TypeScripts`
 - 功能说明：
   - 设置 TypeScript 源文件的根目录路径
   - 所有的源文件都将从此目录下解析

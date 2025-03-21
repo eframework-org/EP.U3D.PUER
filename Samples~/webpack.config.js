@@ -1,10 +1,10 @@
 const fs = require("fs")
 const path = require("path")
-const package = require(path.resolve(__dirname, "../../package.json"))
+const package = require(path.resolve(__dirname, "package.json"))
 
 const entries = {}
 Object.keys(package.dependencies).forEach(dep => {
-    const dpackage = require(path.resolve(__dirname, `../../node_modules/${dep}/package.json`))
+    const dpackage = require(path.resolve(__dirname, `node_modules/${dep}/package.json`))
     if (dpackage.module || dpackage.browser || dpackage.main) {
         let name = ""
         if (dpackage.module) name = dpackage.module
@@ -26,7 +26,7 @@ module.exports = {
     entry: entries,
     output: {
         filename: "[name].js",
-        path: path.resolve(__dirname, "../../Assets/Temp/Scripts/TS/"),
+        path: path.resolve(__dirname, "Assets/Temp/TypeScripts"),
         library: { type: "module" },
     },
     mode: "production",
