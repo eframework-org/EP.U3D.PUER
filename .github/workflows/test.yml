@@ -24,7 +24,7 @@ permissions:
 jobs:
   test:
     name: 测试 ${{ matrix.testMode }} 环境
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
