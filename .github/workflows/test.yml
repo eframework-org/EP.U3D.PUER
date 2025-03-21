@@ -64,7 +64,7 @@ jobs:
           npm -v
           
           # 安装项目依赖
-          cd Package/${{ matrix.projectPath }}
+          cd ${{ matrix.projectPath }}
           if (Test-Path package.json) {
             npm install
             Write-Host "npm 依赖安装完成"
