@@ -944,7 +944,8 @@ namespace ET.U3D.PUER
                 modules.Sort();
 
                 var imodules = string.Join(" ", modules.Select(m => $"file:{m}"));
-                XEditor.Cmd.Run(bin: XEditor.Cmd.Find("npm"), args: new string[] { "install", imodules }).Wait();
+                var bin = XEditor.Cmd.Find("npm");
+                XEditor.Cmd.Run(bin: string.IsNullOrEmpty(bin) ? "npm" : bin, args: new string[] { "install", imodules }).Wait();
 
                 #region cleanup package.json
                 var pkg = XFile.PathJoin(XEnv.ProjectPath, "package.json");
@@ -1152,7 +1153,8 @@ $@"{{
                     if (install)
                     {
                         dirty = true;
-                        XEditor.Cmd.Run(bin: XEditor.Cmd.Find("npm"), args: new string[] { "install" }).Wait();
+                        var bin = XEditor.Cmd.Find("npm");
+                        XEditor.Cmd.Run(bin: string.IsNullOrEmpty(bin) ? "npm" : bin, args: new string[] { "install" }).Wait();
                         if (XFile.HasFile(pkgLock) && XFile.HasDirectory(Path.Combine(XEnv.ProjectPath, "node_modules")))
                         {
                             XFile.SaveText(pkgMd5, XFile.FileMD5(pkgLock));

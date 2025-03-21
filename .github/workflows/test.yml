@@ -111,26 +111,6 @@ jobs:
           node-version: '18.x'
           registry-url: 'https://registry.npmjs.org'
           
-      - name: 配置环境变量
-        shell: bash
-        run: |
-          # 获取并格式化 Node.js 路径（Windows格式）
-          NODE_PATH=$(which node | sed 's/^\///;s/\//\\/g;s/^/C:\\/')
-          NPM_PATH=$(which npm | sed 's/^\///;s/\//\\/g;s/^/C:\\/')
-          NODE_DIR=$(dirname $(which node) | sed 's/^\///;s/\//\\/g;s/^/C:\\/')
-          NPM_DIR=$(dirname $(which npm) | sed 's/^\///;s/\//\\/g;s/^/C:\\/')
-          
-          # 将路径添加到 GITHUB_ENV
-          echo "NODE_PATH=$NODE_PATH" >> $GITHUB_ENV
-          echo "NPM_PATH=$NPM_PATH" >> $GITHUB_ENV
-          echo "PATH=$NODE_DIR;$NPM_DIR;$PATH" >> $GITHUB_ENV
-          
-          # 输出信息以便调试
-          echo "Node.js 版本: $(node -v)"
-          echo "npm 版本: $(npm -v)"
-          echo "Node.js 路径: $NODE_PATH"
-          echo "npm 路径: $NPM_PATH"
-          
       - name: 安装项目依赖
         shell: bash
         run: |
@@ -145,7 +125,6 @@ jobs:
           UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
           UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
           UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
-          PATH: ${{ env.PATH }}
         with:
           projectPath: ${{ matrix.projectPath }}
           unityVersion: ${{ matrix.unityVersion }}
