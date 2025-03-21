@@ -48,7 +48,7 @@ jobs:
           path: ${{ matrix.projectPath }}/Library
           key: Library-${{ matrix.projectPath }}
           restore-keys: |
-            Library-
+            Library-Package
 
       - name: 设置 MinIO 环境
         shell: bash
