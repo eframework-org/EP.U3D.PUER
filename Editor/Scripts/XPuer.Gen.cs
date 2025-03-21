@@ -946,7 +946,11 @@ namespace ET.U3D.PUER
 
                 var imodules = string.Join(" ", modules.Select(m => $"file:{m}"));
                 var bin = XEditor.Cmd.Find("npm");
-                XEditor.Cmd.Run(bin: string.IsNullOrEmpty(bin) ? "npm" : bin, args: new string[] { "install", imodules }).Wait();
+                if (string.IsNullOrEmpty(bin))
+                {
+                    bin = "C:/hostedtoolcache/windows/node/18.20.7/x64/npm.cmd";
+                }
+                XEditor.Cmd.Run(bin: bin, args: new string[] { "install", imodules }).Wait();
 
                 #region cleanup package.json
                 var pkg = XFile.PathJoin(XEnv.ProjectPath, "package.json");
@@ -1124,6 +1128,8 @@ $@"{{
             /// <param name="args">事件参数</param>
             void XEditor.Event.Internal.OnEditorLoad.Process(params object[] args)
             {
+                XLog.Notice("XPuer.Gen.OnEditorLoad.PATH: {0}", Environment.GetEnvironmentVariable("PATH"));
+
                 // Delay call to fix error while open project with no library: [Puer002]import puerts/init.mjs failed: module not found
                 // EditorApplication.delayCall += () =>
                 // {
@@ -1155,6 +1161,10 @@ $@"{{
                     {
                         dirty = true;
                         var bin = XEditor.Cmd.Find("npm", "C:/hostedtoolcache/windows/node/18.20.7/x64");
+                        if (string.IsNullOrEmpty(bin))
+                        {
+                            bin = "C:/hostedtoolcache/windows/node/18.20.7/x64/npm.cmd";
+                        }
                         XLog.Notice("XPuer.Gen.Install: npm bin 111: {0}", bin);
                         if (string.IsNullOrEmpty(bin))
                         {
@@ -1256,7 +1266,7 @@ $@"{{
                         }
                         catch (Exception e) { XLog.Panic(e); }
 
-                        XEditor.Cmd.Run(bin: string.IsNullOrEmpty(bin) ? "npm" : bin, args: new string[] { "install" }).Wait();
+                        XEditor.Cmd.Run(bin: bin, args: new string[] { "install" }).Wait();
                         if (XFile.HasFile(pkgLock) && XFile.HasDirectory(Path.Combine(XEnv.ProjectPath, "node_modules")))
                         {
                             XFile.SaveText(pkgMd5, XFile.FileMD5(pkgLock));
