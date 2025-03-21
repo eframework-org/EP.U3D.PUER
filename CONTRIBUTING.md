@@ -420,8 +420,8 @@ public class Test<模块名称>
 ## 开发流程
 
 ### 1. 环境准备
-- 克隆解决方案仓库：`git clone https://github.com/eframework-org/EF.U3D.git`
-- 使用 `Cursor` 或 `VS Code` 编辑器打开解决方案
+- 克隆项目仓库：`git clone https://github.com/eframework-org/EP.U3D.PUER.git`
+- 使用 `Cursor` 或 `VS Code` 编辑器打开示例工程目录 `Samples~`
 
 ### 2. 开发调试
 - 在编辑器中运行 `Open in Unity` 任务以打开 Unity 工程
