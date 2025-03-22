@@ -113,21 +113,26 @@ jobs:
           # 基于 unityci/editor 镜像
           FROM unityci/editor:windows-${{ matrix.unityVersion }}-windows-il2cpp-3
 
-          # 设置 Node.js 版本
-          ENV NODE_VERSION 18.16.0
-
           # 安装 Node.js 软件
           RUN powershell -Command \
-              Invoke-WebRequest -Uri https://nodejs.org/dist/v$env:NODE_VERSION/node-v$env:NODE_VERSION-x64.msi -OutFile nodejs.msi; \
+              $env:NODE_VERSION='18.16.0'; \
+              Write-Host "Downloading Node.js v$env:NODE_VERSION"; \
+              Invoke-WebRequest -Uri "https://nodejs.org/dist/v$env:NODE_VERSION/node-v$env:NODE_VERSION-x64.msi" -OutFile nodejs.msi; \
+              Write-Host "Installing Node.js"; \
               Start-Process msiexec.exe -ArgumentList '/i', 'nodejs.msi', '/quiet', '/norestart' -NoNewWindow -Wait; \
-              Remove-Item -Force nodejs.msi
+              Write-Host "Node.js installation completed"; \
+              Remove-Item -Force nodejs.msi; \
+              Write-Host "Node.js version:"; \
+              node --version; \
+              Write-Host "npm version:"; \
+              npm --version
           EOF
 
           # 构建镜像
-          docker build -t unity-editor-nodejs:latest .
+          docker build -t unity-windows-editor-nodejs:latest .
           
           # 显示镜像
-          docker images | grep unity-editor-nodejs
+          docker images | grep unity-windows-editor-nodejs
       
       - name: 运行测试
         uses: game-ci/unity-test-runner@v4
@@ -144,7 +149,7 @@ jobs:
           artifactsPath: Results
           githubToken: ${{ secrets.GITHUB_TOKEN }}
           checkName: 测试 ${{ matrix.testMode }} 报告
-          customImage: unity-editor-nodejs:latest
+          customImage: unity-windows-editor-nodejs:latest
 
       - name: 上传报告
         uses: actions/upload-artifact@v4
