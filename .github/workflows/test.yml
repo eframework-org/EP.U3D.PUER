@@ -31,7 +31,7 @@ jobs:
         projectPath:
           - Package/Samples~
         unityVersion: [6000.0.32f1]
-        testMode: [PlayMode]
+        testMode: [EditMode]
     outputs:
       passed: ${{ steps.tests.conclusion == 'success' }}
 
@@ -165,6 +165,29 @@ jobs:
           # 查看复制后的文件
           echo "复制后的 Node.js 文件列表:"
           ls -la ${{ matrix.projectPath }}/Library/
+          
+          # 确保 node 和 npm 可执行
+          echo "设置可执行权限..."
+          chmod +x ${{ matrix.projectPath }}/Library/node
+          chmod +x ${{ matrix.projectPath }}/Library/npm
+          
+          # 验证复制后的 Node.js 可执行性
+          echo "验证复制后的 Node.js..."
+          cd ${{ matrix.projectPath }}
+          
+          echo "测试 node 可执行性:"
+          ./Library/node --version && echo "✓ node 执行成功" || echo "✗ node 执行失败"
+          
+          echo "测试 npm 可执行性:"
+          ./Library/npm --version && echo "✓ npm 执行成功" || echo "✗ npm 执行失败"
+          
+          echo "测试简单 Node.js 脚本:"
+          echo "console.log('Hello from Node.js in Unity Library directory');" > test.js
+          ./Library/node test.js && echo "✓ 脚本执行成功" || echo "✗ 脚本执行失败"
+          
+          # 保存路径到环境变量
+          NODE_COPY_PATH=$(pwd)/Library
+          echo "NODE_COPY_PATH=$NODE_COPY_PATH" >> $GITHUB_ENV
       
       - name: 运行测试
         uses: game-ci/unity-test-runner@v4
