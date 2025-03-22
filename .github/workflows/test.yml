@@ -70,8 +70,8 @@ jobs:
           # 下载并配置 MinIO
           RUN powershell -Command \
               Write-Host "创建 MinIO 目录"; \
-              New-Item -Path "C:\\MinIO\\" -ItemType Directory -Force; \
-              New-Item -Path "C:\\MinIO\\data\\" -ItemType Directory -Force; \
+              New-Item -Path "C:\\MinIO" -ItemType Directory -Force; \
+              New-Item -Path "C:\\MinIO\\data" -ItemType Directory -Force; \
               Write-Host "下载 MinIO 服务器..."; \
               Invoke-WebRequest -Uri "https://dl.min.io/server/minio/release/windows-amd64/minio.exe" -OutFile "C:\\MinIO\\minio.exe"; \
               Write-Host "下载 MinIO 客户端..."; \
