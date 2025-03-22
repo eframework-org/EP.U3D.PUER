@@ -50,61 +50,6 @@ jobs:
           restore-keys: |
             Library-${{ runner.os }}-
 
-      - name: 设置 MinIO 环境
-        shell: bash
-        run: |
-          # 创建临时目录
-          mkdir -p /c/minio/data
-          
-          # 下载 MinIO 服务器和客户端
-          echo "下载 MinIO 服务器..."
-          curl -L -o /c/minio/minio.exe https://dl.min.io/server/minio/release/windows-amd64/minio.exe --progress-bar
-          echo "下载 MinIO 客户端..."
-          curl -L -o /c/minio/mc.exe https://dl.min.io/client/mc/release/windows-amd64/mc.exe --progress-bar
-          
-          # 设置环境变量
-          export MINIO_ACCESS_KEY="admin"
-          export MINIO_SECRET_KEY="adminadmin"
-          
-          # 启动 MinIO 服务器 (在后台运行)
-          echo "启动 MinIO 服务器..."
-          /c/minio/minio.exe server /c/minio/data --console-address ":9090" --address ":9000" > /c/minio/minio.log 2>&1 &
-          
-          # 等待 MinIO 服务启动
-          echo "等待 MinIO 服务启动..."
-          max_retries=30
-          retry_interval=2
-          retry_count=0
-          
-          until curl -s --head http://localhost:9000/minio/health/ready || [ $retry_count -eq $max_retries ]; do
-            echo "等待 MinIO 服务就绪... (尝试 $retry_count/$max_retries)"
-            sleep $retry_interval
-            retry_count=$((retry_count+1))
-          done
-          
-          if [ $retry_count -eq $max_retries ]; then
-            echo "MinIO 服务启动超时，检查日志:"
-            cat /c/minio/minio.log
-            exit 1
-          fi
-          
-          echo "MinIO 服务已就绪"
-          
-          # 配置 MinIO 客户端
-          echo "配置 MinIO 客户端..."
-          /c/minio/mc.exe alias set myminio http://localhost:9000 admin adminadmin
-          
-          # 创建 default bucket 并设置为公开访问
-          echo "创建 default bucket..."
-          /c/minio/mc.exe mb myminio/default
-          echo "设置 default bucket 为公开访问..."
-          /c/minio/mc.exe anonymous set public myminio/default
-          
-          echo "MinIO 环境设置完成，default bucket 已创建并设置为公开访问"
-          
-          # 添加 MinIO 目录到 PATH
-          echo "/c/minio" >> $GITHUB_PATH
-
       - name: 构建 Unity 镜像
         shell: bash
         run: |
@@ -113,15 +58,47 @@ jobs:
           # 基于 unityci/editor 镜像
           FROM unityci/editor:windows-${{ matrix.unityVersion }}-windows-il2cpp-3
 
-          # 安装 Node.js 软件
+          # 下载并安装 Node.js
           RUN powershell -Command \
-              Write-Host "Downloading Node.js"; \
+              Write-Host "下载 Node.js"; \
               Invoke-WebRequest -Uri "https://nodejs.org/dist/v18.16.0/node-v18.16.0-x64.msi" -OutFile nodejs.msi; \
-              Write-Host "Installing Node.js"; \
+              Write-Host "安装 Node.js"; \
               Start-Process msiexec.exe -ArgumentList '/i', 'nodejs.msi', '/quiet', '/norestart' -NoNewWindow -Wait; \
-              Write-Host "Node.js installation completed"; \
+              Write-Host "Node.js 安装完成"; \
               Remove-Item -Force nodejs.msi;
           EOF
+
+          # 下载并配置 MinIO
+          RUN powershell -Command \
+              Write-Host "创建 MinIO 目录"; \
+              New-Item -Path "C:\\MinIO\\" -ItemType Directory -Force; \
+              New-Item -Path "C:\\MinIO\\data\\" -ItemType Directory -Force; \
+              Write-Host "下载 MinIO 服务器..."; \
+              Invoke-WebRequest -Uri "https://dl.min.io/server/minio/release/windows-amd64/minio.exe" -OutFile "C:\\MinIO\\minio.exe"; \
+              Write-Host "下载 MinIO 客户端..."; \
+              Invoke-WebRequest -Uri "https://dl.min.io/client/mc/release/windows-amd64/mc.exe" -OutFile "C:\\MinIO\\mc.exe"; \
+              Write-Host "创建 MinIO 启动脚本..."; \
+              New-Item -Path "C:\\MinIO\\startup.bat" -ItemType File -Force; \
+              Add-Content -Path "C:\\MinIO\\startup.bat" -Value '@echo off'; \
+              Add-Content -Path "C:\\MinIO\\startup.bat" -Value 'set MINIO_ACCESS_KEY="admin"'; \
+              Add-Content -Path "C:\\MinIO\\startup.bat" -Value 'set MINIO_SECRET_KEY="adminadmin"'; \
+              Add-Content -Path "C:\\MinIO\\startup.bat" -Value 'start /b minio server C:\\MinIO\\data --console-address :9090 --address :9000 > C:\\MinIO\\minio.log'; \
+              Add-Content -Path "C:\\MinIO\\startup.bat" -Value ':CHECK_MINIO_READY'; \
+              Add-Content -Path "C:\\MinIO\\startup.bat" -Value 'timeout /t 1 /nobreak > nul'; \
+              Add-Content -Path "C:\\MinIO\\startup.bat" -Value 'curl -s -f -o nul http://localhost:9000/minio/health/ready'; \
+              Add-Content -Path "C:\\MinIO\\startup.bat" -Value 'if %ERRORLEVEL% neq 0 goto CHECK_MINIO_READY'; \
+              Add-Content -Path "C:\\MinIO\\startup.bat" -Value 'mc alias set myminio http://localhost:9000 admin adminadmin'; \
+              Add-Content -Path "C:\\MinIO\\startup.bat" -Value 'mc mb myminio/default'; \
+              Add-Content -Path "C:\\MinIO\\startup.bat" -Value 'mc anonymous set public myminio/default'; \
+              Write-Host "MinIO 安装完成";
+          EOF
+
+          # 设置环境变量
+          SHELL ["cmd", "/S", "/C"]
+          RUN setx /M PATH "%PATH%;C:\\MinIO"
+
+          # 设置容器启动时执行 MinIO 启动脚本
+          ENTRYPOINT ["cmd", "/C", "C:\\MinIO\\startup.bat && cmd"]
 
           # 构建镜像
           docker build -t unity-windows-editor-nodejs:latest .
@@ -145,7 +122,6 @@ jobs:
           githubToken: ${{ secrets.GITHUB_TOKEN }}
           checkName: 测试 ${{ matrix.testMode }} 报告
           customImage: unity-windows-editor-nodejs:latest
-          useHostNetwork: true
 
       - name: 上传报告
         uses: actions/upload-artifact@v4
