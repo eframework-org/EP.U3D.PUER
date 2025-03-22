@@ -96,7 +96,7 @@ jobs:
           RUN setx /M PATH "%PATH%;C:\\MinIO"
 
           # 设置容器入口
-          ENTRYPOINT cmd /C "C:\\MinIO\\startup.bat && cmd"
+          CMD ["cmd", "/C", "C:\\MinIO\\startup.bat && cmd"]
           EOF
           
           # 构建镜像
