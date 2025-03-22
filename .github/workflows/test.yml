@@ -115,9 +115,8 @@ jobs:
 
           # 安装 Node.js 软件
           RUN powershell -Command \
-              $env:NODE_VERSION='18.16.0'; \
-              Write-Host "Downloading Node.js v$env:NODE_VERSION"; \
-              Invoke-WebRequest -Uri "https://nodejs.org/dist/v$env:NODE_VERSION/node-v$env:NODE_VERSION-x64.msi" -OutFile nodejs.msi; \
+              Write-Host "Downloading Node.js"; \
+              Invoke-WebRequest -Uri "https://nodejs.org/dist/v18.16.0/node-18.16.0-x64.msi" -OutFile nodejs.msi; \
               Write-Host "Installing Node.js"; \
               Start-Process msiexec.exe -ArgumentList '/i', 'nodejs.msi', '/quiet', '/norestart' -NoNewWindow -Wait; \
               Write-Host "Node.js installation completed"; \
