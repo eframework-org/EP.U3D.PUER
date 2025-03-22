@@ -120,11 +120,7 @@ jobs:
               Write-Host "Installing Node.js"; \
               Start-Process msiexec.exe -ArgumentList '/i', 'nodejs.msi', '/quiet', '/norestart' -NoNewWindow -Wait; \
               Write-Host "Node.js installation completed"; \
-              Remove-Item -Force nodejs.msi; \
-              Write-Host "Node.js version:"; \
-              node --version; \
-              Write-Host "npm version:"; \
-              npm --version
+              Remove-Item -Force nodejs.msi;
           EOF
 
           # 构建镜像
