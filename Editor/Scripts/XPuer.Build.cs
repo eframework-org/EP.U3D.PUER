@@ -198,7 +198,7 @@ namespace ET.U3D.PUER
                 var tasks = XPrefs.GetStrings(Prefs.Tasks, Prefs.TasksDefault);
                 foreach (var name in tasks)
                 {
-                    var task = XEditor.Cmd.Run(bin: XEditor.Cmd.Find("npm", XFile.PathJoin(XEnv.ProjectPath, "Library")), args: new string[] { "run", name });
+                    var task = XEditor.Cmd.Run(bin: XEditor.Cmd.Find("npm", XFile.PathJoin(XEnv.ProjectPath, "Local")), args: new string[] { "run", name });
                     task.Wait();
                     if (task.Result.Code != 0)
                     {
