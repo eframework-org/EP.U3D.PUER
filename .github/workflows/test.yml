@@ -65,8 +65,7 @@ jobs:
               Write-Host "安装 Node.js"; \
               Start-Process msiexec.exe -ArgumentList '/i', 'nodejs.msi', '/quiet', '/norestart' -NoNewWindow -Wait; \
               Write-Host "Node.js 安装完成"; \
-              Remove-Item -Force nodejs.msi;
-          EOF
+              Remove-Item -Force nodejs.msi
 
           # 下载并配置 MinIO
           RUN powershell -Command \
@@ -90,8 +89,7 @@ jobs:
               Add-Content -Path "C:\\MinIO\\startup.bat" -Value 'mc alias set myminio http://localhost:9000 admin adminadmin'; \
               Add-Content -Path "C:\\MinIO\\startup.bat" -Value 'mc mb myminio/default'; \
               Add-Content -Path "C:\\MinIO\\startup.bat" -Value 'mc anonymous set public myminio/default'; \
-              Write-Host "MinIO 安装完成";
-          EOF
+              Write-Host "MinIO 安装完成"
 
           # 设置环境变量
           SHELL ["cmd", "/S", "/C"]
@@ -99,7 +97,8 @@ jobs:
 
           # 设置容器启动时执行 MinIO 启动脚本
           ENTRYPOINT ["cmd", "/C", "C:\\MinIO\\startup.bat && cmd"]
-
+          EOF
+          
           # 构建镜像
           docker build -t unity-windows-editor-nodejs:latest .
           
