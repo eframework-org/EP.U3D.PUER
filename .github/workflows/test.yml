@@ -50,10 +50,10 @@ jobs:
           restore-keys: |
             Library-${{ runner.os }}-
 
-      - name: 构建 Unity 镜像
+      - name: 构建镜像
         shell: bash
         run: |
-          # 创建临时 Dockerfile
+          # 创建 Dockerfile
           cat > Dockerfile << EOF
           # 基于 unityci/editor 镜像
           FROM unityci/editor:windows-${{ matrix.unityVersion }}-windows-il2cpp-3
