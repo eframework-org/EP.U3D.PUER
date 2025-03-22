@@ -54,7 +54,7 @@ jobs:
         shell: bash
         run: |
           # 创建 Dockerfile
-          cat > Dockerfile << EOF
+          cat > Dockerfile << 'EOF'
           # 基于 unityci/editor 镜像
           FROM unityci/editor:windows-${{ matrix.unityVersion }}-windows-il2cpp-3
 
