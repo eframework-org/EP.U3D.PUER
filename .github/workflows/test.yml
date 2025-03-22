@@ -105,89 +105,28 @@ jobs:
           # 添加 MinIO 目录到 PATH
           echo "/c/minio" >> $GITHUB_PATH
 
-      - name: 设置 Node.js 环境
-        uses: actions/setup-node@v3
-        with:
-          node-version: '18.x'
-          registry-url: 'https://registry.npmjs.org'
-          
-      - name: 打印 Node.js 和 npm 信息
+      - name: 构建 Unity 镜像
         shell: bash
         run: |
-          # 打印 Node.js 和 npm 版本
-          echo "Node.js 版本: $(node -v)"
-          echo "npm 版本: $(npm -v)"
+          # 创建临时 Dockerfile
+          cat > Dockerfile << EOF
+          # 基于 unityci/editor 镜像
+          FROM unityci/editor:ubuntu-${{ matrix.unityVersion }}-linux-il2cpp-3
+
+          # 设置 Node.js 版本
+          ENV NODE_VERSION 18.16.0
+
+          # 安装 Node.js 软件
+          RUN powershell -Command \
+              Invoke-WebRequest -Uri https://nodejs.org/dist/v$env:NODE_VERSION/node-v$env:NODE_VERSION-x64.msi -OutFile nodejs.msi; \
+              Start-Process msiexec.exe -ArgumentList '/i', 'nodejs.msi', '/quiet', '/norestart' -NoNewWindow -Wait; \
+              Remove-Item -Force nodejs.msi
           
-          # 打印 Node.js 和 npm 的完整路径 (Unix格式)
-          echo "Node.js 路径 (Unix): $(which node)"
-          echo "npm 路径 (Unix): $(which npm)"
+          # 构建镜像
+          docker build -t unity-editor-nodejs:latest .
           
-          # 打印 Node.js 和 npm 的完整路径 (Windows格式)
-          NODE_WIN_PATH=$(which node | sed 's/^\///;s/\//\\/g;s/^/C:\\/')
-          NPM_WIN_PATH=$(which npm | sed 's/^\///;s/\//\\/g;s/^/C:\\/')
-          echo "Node.js 路径 (Windows): $NODE_WIN_PATH"
-          echo "npm 路径 (Windows): $NPM_WIN_PATH"
-          
-          # 打印环境变量中的路径设置
-          echo "PATH 环境变量: $PATH"
-          
-          # 检查 node 和 npm 是否可执行
-          echo "检查 node 是否可执行:"
-          node --version && echo "node 可以执行" || echo "node 不可执行"
-          echo "检查 npm 是否可执行:"
-          npm --version && echo "npm 可以执行" || echo "npm 不可执行"
-          
-          # 查看 Node.js 安装目录内容
-          NODE_PATH=$(dirname $(which node))
-          echo "Node.js 安装目录 ($NODE_PATH) 内容:"
-          ls -la $NODE_PATH
-          
-          # 保存 NODE_PATH 到环境变量
-          echo "NODE_PATH=$NODE_PATH" >> $GITHUB_ENV
-          
-      # - name: 复制 Node.js 文件到项目 Library 目录
-      #   shell: bash
-      #   run: |
-      #     # 确保目标目录存在
-      #     mkdir -p ${{ matrix.projectPath }}/Local
-          
-      #     # 复制 Node.js 目录内容到项目 Library 目录
-      #     echo "复制 Node.js 文件到项目目录..."
-      #     cp -rv $NODE_DIR/* ${{ matrix.projectPath }}/Local/
-          
-      #     # 复制 npm
-      #     NPM_DIR=$(dirname $(which npm))
-      #     if [ "$NODE_DIR" != "$NPM_DIR" ]; then
-      #       echo "npm 在不同目录，也进行复制..."
-      #       cp -rv $NPM_DIR/* ${{ matrix.projectPath }}/Local/
-      #     fi
-          
-      #     # 查看复制后的文件
-      #     echo "复制后的 Node.js 文件列表:"
-      #     ls -la ${{ matrix.projectPath }}/Local/
-          
-      #     # 确保 node 和 npm 可执行
-      #     echo "设置可执行权限..."
-      #     chmod +x ${{ matrix.projectPath }}/Local/node
-      #     chmod +x ${{ matrix.projectPath }}/Local/npm
-          
-      #     # 验证复制后的 Node.js 可执行性
-      #     echo "验证复制后的 Node.js..."
-      #     cd ${{ matrix.projectPath }}
-          
-      #     echo "测试 node 可执行性:"
-      #     ./Local/node --version && echo "✓ node 执行成功" || echo "✗ node 执行失败"
-          
-      #     echo "测试 npm 可执行性:"
-      #     ./Local/npm --version && echo "✓ npm 执行成功" || echo "✗ npm 执行失败"
-          
-      #     echo "测试简单 Node.js 脚本:"
-      #     echo "console.log('Hello from Node.js in Project Local directory');" > test.js
-      #     ./Local/node test.js && echo "✓ 脚本执行成功" || echo "✗ 脚本执行失败"
-          
-      #     # 保存路径到环境变量
-      #     NODE_COPY_PATH=$(pwd)/Local
-      #     echo "NODE_COPY_PATH=$NODE_COPY_PATH" >> $GITHUB_ENV
+          # 显示镜像
+          docker images | grep unity-editor-nodejs
       
       - name: 运行测试
         uses: game-ci/unity-test-runner@v4
@@ -204,7 +143,7 @@ jobs:
           artifactsPath: Results
           githubToken: ${{ secrets.GITHUB_TOKEN }}
           checkName: 测试 ${{ matrix.testMode }} 报告
-          dockerIsolationMode: process
+          customImage: unity-editor-nodejs:latest
 
       - name: 上传报告
         uses: actions/upload-artifact@v4
