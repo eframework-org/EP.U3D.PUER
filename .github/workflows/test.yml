@@ -50,7 +50,7 @@ jobs:
           restore-keys: |
             Library-${{ runner.os }}-
 
-      - name: 构建镜像
+      - name: 准备镜像
         shell: bash
         run: |
           # 创建 Dockerfile
@@ -95,8 +95,8 @@ jobs:
           SHELL ["cmd", "/S", "/C"]
           RUN setx /M PATH "%PATH%;C:\\MinIO"
 
-          # 设置容器启动时执行 MinIO 启动脚本
-          ENTRYPOINT ["cmd", "/C", "C:\\MinIO\\startup.bat && cmd"]
+          # 设置容器入口
+          ENTRYPOINT cmd /C "C:\\MinIO\\startup.bat && cmd"
           EOF
           
           # 构建镜像
