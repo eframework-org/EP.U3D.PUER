@@ -945,11 +945,8 @@ namespace ET.U3D.PUER
                 modules.Sort();
 
                 var imodules = string.Join(" ", modules.Select(m => $"file:{m}"));
-                var bin = XEditor.Cmd.Find("npm");
-                if (string.IsNullOrEmpty(bin))
-                {
-                    bin = "C:/hostedtoolcache/windows/node/18.20.7/x64/npm.cmd";
-                }
+                var bin = XEditor.Cmd.Find("npm", XFile.PathJoin(XEnv.ProjectPath, "Library"));
+                XLog.Notice("XPuer.Gen.LinkModule: npm bin: {0}", bin);
                 XEditor.Cmd.Run(bin: bin, args: new string[] { "install", imodules }).Wait();
 
                 #region cleanup package.json
@@ -1160,111 +1157,107 @@ $@"{{
                     if (install)
                     {
                         dirty = true;
-                        var bin = XEditor.Cmd.Find("npm", "C:/hostedtoolcache/windows/node/18.20.7/x64");
-                        if (string.IsNullOrEmpty(bin))
-                        {
-                            bin = "C:/hostedtoolcache/windows/node/18.20.7/x64/npm.cmd";
-                        }
-                        XLog.Notice("XPuer.Gen.Install: npm bin 111: {0}", bin);
-                        if (string.IsNullOrEmpty(bin))
-                        {
-                            bin = XEditor.Cmd.Find("npm", "C:/hostedtoolcache/windows/node/18.20.7/x64");
-                            XLog.Notice("XPuer.Gen.Install: npm bin 222: {0}", bin);
-                        }
+                        var bin = XEditor.Cmd.Find("npm", XFile.PathJoin(XEnv.ProjectPath, "Library"));
+                        XLog.Notice("XPuer.Gen.Install: npm bin: {0}", bin);
+                        // if (string.IsNullOrEmpty(bin))
+                        // {
+                        //     bin = XEditor.Cmd.Find("npm", "C:/hostedtoolcache/windows/node/18.20.7/x64");
+                        //     XLog.Notice("XPuer.Gen.Install: npm bin 222: {0}", bin);
+                        // }
 
-                        try
-                        {
+                        // try
+                        // {
 
-                            var proc = new Process();
-                            proc.StartInfo.FileName = "npm.cmd";
-                            proc.StartInfo.Arguments = "version";
-                            proc.StartInfo.WorkingDirectory = XEnv.ProjectPath;
-                            proc.StartInfo.UseShellExecute = false;
-                            proc.StartInfo.RedirectStandardOutput = true;
-                            proc.StartInfo.RedirectStandardError = true;
+                        //     var proc = new Process();
+                        //     proc.StartInfo.FileName = "npm.cmd";
+                        //     proc.StartInfo.Arguments = "version";
+                        //     proc.StartInfo.WorkingDirectory = XEnv.ProjectPath;
+                        //     proc.StartInfo.UseShellExecute = false;
+                        //     proc.StartInfo.RedirectStandardOutput = true;
+                        //     proc.StartInfo.RedirectStandardError = true;
 
-                            proc.OutputDataReceived += (sender, e) =>
-                            {
-                                if (e.Data != null)
-                                    XLog.Notice("XPuer.Gen.Install.Proc.Stdout: {0}", e.Data);  // 输出标准输出到控制台
-                            };
+                        //     proc.OutputDataReceived += (sender, e) =>
+                        //     {
+                        //         if (e.Data != null)
+                        //             XLog.Notice("XPuer.Gen.Install.Proc.Stdout: {0}", e.Data);  // 输出标准输出到控制台
+                        //     };
 
-                            proc.ErrorDataReceived += (sender, e) =>
-                            {
-                                if (e.Data != null)
-                                    XLog.Notice("XPuer.Gen.Install.Proc.Stderr: {0}", e.Data);  // 输出错误输出到控制台
-                            };
+                        //     proc.ErrorDataReceived += (sender, e) =>
+                        //     {
+                        //         if (e.Data != null)
+                        //             XLog.Notice("XPuer.Gen.Install.Proc.Stderr: {0}", e.Data);  // 输出错误输出到控制台
+                        //     };
 
-                            proc.Start();
-                            proc.BeginOutputReadLine();  // 开始异步读取标准输出
-                            proc.BeginErrorReadLine();   // 开始异步读取标准错误
+                        //     proc.Start();
+                        //     proc.BeginOutputReadLine();  // 开始异步读取标准输出
+                        //     proc.BeginErrorReadLine();   // 开始异步读取标准错误
 
-                            proc.WaitForExit();  // 等待进程结束
-                        }
-                        catch (Exception e) { XLog.Panic(e); }
+                        //     proc.WaitForExit();  // 等待进程结束
+                        // }
+                        // catch (Exception e) { XLog.Panic(e); }
 
 
-                        try
-                        {
+                        // try
+                        // {
 
-                            var proc = new Process();
-                            proc.StartInfo.FileName = "npm.exe";
-                            proc.StartInfo.Arguments = "version";
-                            proc.StartInfo.WorkingDirectory = XEnv.ProjectPath;
-                            proc.StartInfo.UseShellExecute = false;
-                            proc.StartInfo.RedirectStandardOutput = true;
-                            proc.StartInfo.RedirectStandardError = true;
+                        //     var proc = new Process();
+                        //     proc.StartInfo.FileName = "npm.exe";
+                        //     proc.StartInfo.Arguments = "version";
+                        //     proc.StartInfo.WorkingDirectory = XEnv.ProjectPath;
+                        //     proc.StartInfo.UseShellExecute = false;
+                        //     proc.StartInfo.RedirectStandardOutput = true;
+                        //     proc.StartInfo.RedirectStandardError = true;
 
-                            proc.OutputDataReceived += (sender, e) =>
-                            {
-                                if (e.Data != null)
-                                    XLog.Notice("XPuer.Gen.Install.Proc2222.Stdout: {0}", e.Data);  // 输出标准输出到控制台
-                            };
+                        //     proc.OutputDataReceived += (sender, e) =>
+                        //     {
+                        //         if (e.Data != null)
+                        //             XLog.Notice("XPuer.Gen.Install.Proc2222.Stdout: {0}", e.Data);  // 输出标准输出到控制台
+                        //     };
 
-                            proc.ErrorDataReceived += (sender, e) =>
-                            {
-                                if (e.Data != null)
-                                    XLog.Notice("XPuer.Gen.Install.Proc2222.Stderr: {0}", e.Data);  // 输出错误输出到控制台
-                            };
+                        //     proc.ErrorDataReceived += (sender, e) =>
+                        //     {
+                        //         if (e.Data != null)
+                        //             XLog.Notice("XPuer.Gen.Install.Proc2222.Stderr: {0}", e.Data);  // 输出错误输出到控制台
+                        //     };
 
-                            proc.Start();
-                            proc.BeginOutputReadLine();  // 开始异步读取标准输出
-                            proc.BeginErrorReadLine();   // 开始异步读取标准错误
+                        //     proc.Start();
+                        //     proc.BeginOutputReadLine();  // 开始异步读取标准输出
+                        //     proc.BeginErrorReadLine();   // 开始异步读取标准错误
 
-                            proc.WaitForExit();  // 等待进程结束
-                        }
-                        catch (Exception e) { XLog.Panic(e); }
+                        //     proc.WaitForExit();  // 等待进程结束
+                        // }
+                        // catch (Exception e) { XLog.Panic(e); }
 
-                        try
-                        {
+                        // try
+                        // {
 
-                            var proc = new Process();
-                            proc.StartInfo.FileName = "npm";
-                            proc.StartInfo.Arguments = "version";
-                            proc.StartInfo.WorkingDirectory = XEnv.ProjectPath;
-                            proc.StartInfo.UseShellExecute = false;
-                            proc.StartInfo.RedirectStandardOutput = true;
-                            proc.StartInfo.RedirectStandardError = true;
+                        //     var proc = new Process();
+                        //     proc.StartInfo.FileName = "npm";
+                        //     proc.StartInfo.Arguments = "version";
+                        //     proc.StartInfo.WorkingDirectory = XEnv.ProjectPath;
+                        //     proc.StartInfo.UseShellExecute = false;
+                        //     proc.StartInfo.RedirectStandardOutput = true;
+                        //     proc.StartInfo.RedirectStandardError = true;
 
-                            proc.OutputDataReceived += (sender, e) =>
-                            {
-                                if (e.Data != null)
-                                    XLog.Notice("XPuer.Gen.Install.Proc3333.Stdout: {0}", e.Data);  // 输出标准输出到控制台
-                            };
+                        //     proc.OutputDataReceived += (sender, e) =>
+                        //     {
+                        //         if (e.Data != null)
+                        //             XLog.Notice("XPuer.Gen.Install.Proc3333.Stdout: {0}", e.Data);  // 输出标准输出到控制台
+                        //     };
 
-                            proc.ErrorDataReceived += (sender, e) =>
-                            {
-                                if (e.Data != null)
-                                    XLog.Notice("XPuer.Gen.Install.Proc3333.Stderr: {0}", e.Data);  // 输出错误输出到控制台
-                            };
+                        //     proc.ErrorDataReceived += (sender, e) =>
+                        //     {
+                        //         if (e.Data != null)
+                        //             XLog.Notice("XPuer.Gen.Install.Proc3333.Stderr: {0}", e.Data);  // 输出错误输出到控制台
+                        //     };
 
-                            proc.Start();
-                            proc.BeginOutputReadLine();  // 开始异步读取标准输出
-                            proc.BeginErrorReadLine();   // 开始异步读取标准错误
+                        //     proc.Start();
+                        //     proc.BeginOutputReadLine();  // 开始异步读取标准输出
+                        //     proc.BeginErrorReadLine();   // 开始异步读取标准错误
 
-                            proc.WaitForExit();  // 等待进程结束
-                        }
-                        catch (Exception e) { XLog.Panic(e); }
+                        //     proc.WaitForExit();  // 等待进程结束
+                        // }
+                        // catch (Exception e) { XLog.Panic(e); }
 
                         XEditor.Cmd.Run(bin: bin, args: new string[] { "install" }).Wait();
                         if (XFile.HasFile(pkgLock) && XFile.HasDirectory(Path.Combine(XEnv.ProjectPath, "node_modules")))
