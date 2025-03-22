@@ -11,6 +11,7 @@ using UnityEditor;
 using UnityEditor.Build.Reporting;
 using UnityEngine;
 using static EP.U3D.PUER.XPuer;
+using System.Collections;
 
 namespace ET.U3D.PUER
 {
@@ -386,14 +387,13 @@ namespace ET.U3D.PUER
             }
             XLog.Notice("XPuer.NpmBin: PATH = {0}", Environment.GetEnvironmentVariable("PATH"));
 
-            foreach (string text4 in Environment.GetEnvironmentVariables())
+            foreach (DictionaryEntry kvp in Environment.GetEnvironmentVariables())
             {
-                var value = Environment.GetEnvironmentVariable(text4);
-                XLog.Notice("XPuer.NpmBin: {0} = {1}", text4, value);
+                XLog.Notice("XPuer.NpmBin: {0} = {1}", kvp.Key, kvp.Value);
                 string[] array5 = array;
                 foreach (string text5 in array5)
                 {
-                    string text6 = XFile.PathJoin(value, text5);
+                    string text6 = XFile.PathJoin(kvp.Value.ToString(), text5);
                     if (XFile.HasFile(text6))
                     {
                         XLog.Notice("XPuer.NpmBin: find in var: {0}", text6);
