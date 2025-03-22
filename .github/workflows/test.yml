@@ -111,7 +111,7 @@ jobs:
           # 创建临时 Dockerfile
           cat > Dockerfile << EOF
           # 基于 unityci/editor 镜像
-          FROM unityci/editor:ubuntu-${{ matrix.unityVersion }}-linux-il2cpp-3
+          FROM unityci/editor:windows-${{ matrix.unityVersion }}-windows-il2cpp-3
 
           # 设置 Node.js 版本
           ENV NODE_VERSION 18.16.0
@@ -121,7 +121,8 @@ jobs:
               Invoke-WebRequest -Uri https://nodejs.org/dist/v$env:NODE_VERSION/node-v$env:NODE_VERSION-x64.msi -OutFile nodejs.msi; \
               Start-Process msiexec.exe -ArgumentList '/i', 'nodejs.msi', '/quiet', '/norestart' -NoNewWindow -Wait; \
               Remove-Item -Force nodejs.msi
-          
+          EOF
+
           # 构建镜像
           docker build -t unity-editor-nodejs:latest .
           
