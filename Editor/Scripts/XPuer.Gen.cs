@@ -945,7 +945,7 @@ namespace ET.U3D.PUER
                 modules.Sort();
 
                 var imodules = string.Join(" ", modules.Select(m => $"file:{m}"));
-                var bin = XEditor.Cmd.Find("npm", XFile.PathJoin(XEnv.ProjectPath, "Local"));
+                var bin = XPuer.NpmBin();
                 XLog.Notice("XPuer.Gen.LinkModule: npm bin: {0}", bin);
                 XEditor.Cmd.Run(bin: bin, args: new string[] { "install", imodules }).Wait();
 
@@ -1157,7 +1157,7 @@ $@"{{
                     if (install)
                     {
                         dirty = true;
-                        var bin = XEditor.Cmd.Find("npm", XFile.PathJoin(XEnv.ProjectPath, "Local"));
+                        var bin = XPuer.NpmBin();
                         XLog.Notice("XPuer.Gen.Install: npm bin: {0}", bin);
                         // if (string.IsNullOrEmpty(bin))
                         // {

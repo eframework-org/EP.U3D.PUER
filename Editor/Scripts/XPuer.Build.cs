@@ -198,7 +198,7 @@ namespace ET.U3D.PUER
                 var tasks = XPrefs.GetStrings(Prefs.Tasks, Prefs.TasksDefault);
                 foreach (var name in tasks)
                 {
-                    var task = XEditor.Cmd.Run(bin: XEditor.Cmd.Find("npm", XFile.PathJoin(XEnv.ProjectPath, "Local")), args: new string[] { "run", name });
+                    var task = XEditor.Cmd.Run(bin: XPuer.NpmBin(), args: new string[] { "run", name });
                     task.Wait();
                     if (task.Result.Code != 0)
                     {
@@ -339,6 +339,70 @@ namespace ET.U3D.PUER
                     }
                 }
             }
+        }
+    }
+
+    public partial class XPuer
+    {
+        public static string NpmBin()
+        {
+            var cmd = "npm";
+            string[] array = new string[1] { cmd };
+            if (!cmd.Contains("."))
+            {
+                if (Application.platform == RuntimePlatform.WindowsEditor)
+                {
+                    array = new string[2]
+                    {
+                        cmd + ".cmd",
+                        cmd + ".exe"
+                    };
+                }
+                else if (Application.platform == RuntimePlatform.OSXEditor)
+                {
+                    array = new string[2]
+                    {
+                        cmd,
+                        cmd + ".app"
+                    };
+                }
+            }
+
+            string environmentVariable = Environment.GetEnvironmentVariable("PATH");
+            string[] array2 = environmentVariable.Split(Path.PathSeparator);
+            string[] array3 = array2;
+            foreach (string text in array3)
+            {
+                string[] array4 = array;
+                foreach (string text2 in array4)
+                {
+                    string text3 = XFile.PathJoin(text, text2);
+                    if (XFile.HasFile(text3))
+                    {
+                        XLog.Notice("XPuer.NpmBin: find in path: {0}", text3);
+                        return text3;
+                    }
+                }
+            }
+            XLog.Notice("XPuer.NpmBin: PATH = {0}", Environment.GetEnvironmentVariable("PATH"));
+
+            foreach (string text4 in Environment.GetEnvironmentVariables())
+            {
+                var value = Environment.GetEnvironmentVariable(text4);
+                XLog.Notice("XPuer.NpmBin: {0} = {1}", text4, value);
+                string[] array5 = array;
+                foreach (string text5 in array5)
+                {
+                    string text6 = XFile.PathJoin(value, text5);
+                    if (XFile.HasFile(text6))
+                    {
+                        XLog.Notice("XPuer.NpmBin: find in var: {0}", text6);
+                        return text6;
+                    }
+                }
+            }
+
+            return string.Empty;
         }
     }
 }
