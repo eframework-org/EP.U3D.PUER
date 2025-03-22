@@ -1125,8 +1125,6 @@ $@"{{
             /// <param name="args">事件参数</param>
             void XEditor.Event.Internal.OnEditorLoad.Process(params object[] args)
             {
-                XLog.Notice("XPuer.Gen.OnEditorLoad.PATH: {0}", Environment.GetEnvironmentVariable("PATH"));
-
                 // Delay call to fix error while open project with no library: [Puer002]import puerts/init.mjs failed: module not found
                 // EditorApplication.delayCall += () =>
                 // {
